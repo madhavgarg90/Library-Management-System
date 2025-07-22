@@ -42,12 +42,6 @@ A complete relational database system for managing a library's operations — in
 ### ✅ Trigger Output: Prevent Duplicate Borrowers  
 ![Trigger Output](Images/trigger_output_demo.png)
 
-### 📋 Procedure Output: Book + Borrower Metadata  
-```sql
-EXEC Showdata(bookid => 'B101', bankid => 'L203');
-```
-![Procedure Output](Images/procedure_call_output.png)
-
 ### 🔁 Cursor Output: Looping Over Borrower Records  
 ![Cursor Output](Images/cursor_run_output.png)
 
