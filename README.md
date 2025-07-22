@@ -20,36 +20,36 @@ A complete relational database system for managing a library's operations — in
 
 ## 📐 Entity-Relationship Diagram
 
-![ER Diagram](images/er%20diagram.png)
+![ER Diagram](Images/er_diagram.png)
 
 ---
 
 ## 📊 Sample Table Outputs
 
 ### 📗 `BOOK_INFO` Table  
-![Book Info Table](images/book%20info%20table.png)
+![Book Info Table](Images/book_info_table.png)
 
 ### 👥 `BORROWER` Table  
-![Borrower Table](images/borrower%20table.png)
+![Borrower Table](Images/borrower_table_output.png)
 
 ### 📄 `BOOK_LOANS` Table  
-![Book Loans Table](images/book%20loans%20table.png)
+![Book Loans Table](Images/book_loan_table.png)
 
 ---
 
 ## ⚙️ Logic Demonstrations
 
 ### ✅ Trigger Output: Prevent Duplicate Borrowers  
-![Trigger Output](images/trigger%20output.png)
+![Trigger Output](Images/trigger_output_demo.png)
 
 ### 📋 Procedure Output: Book + Borrower Metadata  
 ```sql
 EXEC Showdata(bookid => 'B101', bankid => 'L203');
 ```
-![Procedure Output](images/procedure%20output.png)
+![Procedure Output](Images/procedure_call_output.png)
 
 ### 🔁 Cursor Output: Looping Over Borrower Records  
-![Cursor Output](images/cursor%20output.png)
+![Cursor Output](Images/cursor_run_output.png)
 
 ---
 
@@ -74,4 +74,3 @@ EXEC Showdata(bookid => 'B101', bankid => 'L203');
 @code.sql
 ```
 
-> 💡 You can capture your outputs using Lightshot or Snipping Tool and save them inside the `images/` folder for display.
