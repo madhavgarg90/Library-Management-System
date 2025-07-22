@@ -1,4 +1,3 @@
-
 DROP TABLE Book_Authors;
 DROP TABLE Book_Copies;
 DROP TABLE Book_Loans;
@@ -64,7 +63,7 @@ INSERT INTO Publisher VALUES ('HarperCollins');
 INSERT INTO Publisher VALUES ('Allen & Unwin');
 INSERT INTO Publisher VALUES ('Secker & Warburg');
 INSERT INTO Publisher VALUES ('T. Egerton');
-INSERT INTO Publisher VALUES ('Charles Scribner's Sons');
+INSERT INTO Publisher VALUES ('Charles Scribner''s Sons');
 INSERT INTO Publisher VALUES ('Little, Brown and Company');
 INSERT INTO Publisher VALUES ('Geoffrey Bles');
 INSERT INTO Publisher VALUES ('Harper & Brothers');
@@ -128,8 +127,10 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE PROCEDURE Showdata(bookid_ IN BOOK_INFO.BookID%TYPE,
-                                      bankid_ IN Book_Loans.BookLoanID%TYPE) 
+CREATE OR REPLACE PROCEDURE Showdata(
+    bookid_ IN BOOK_INFO.BookID%TYPE,
+    bankid_ IN Book_Loans.BookLoanID%TYPE
+) 
 IS
     author_ Book_Authors.AuthorName%TYPE;
     title_ BOOK_INFO.Title%TYPE;
@@ -157,3 +158,15 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Unexpected error occurred');
 END;
 /
+
+DECLARE
+    CURSOR c_customers IS 
+        SELECT Name, CardNo, Address, Phone FROM Borrower;
+BEGIN
+    FOR cust IN c_customers LOOP
+        DBMS_OUTPUT.PUT_LINE('Name: ' || cust.Name || ', CardNo: ' || cust.CardNo);
+    END LOOP;
+END;
+/
+
+SELECT MOST_AVAILABLE_PUBLISHER('Penguin Publishers') FROM dual;
