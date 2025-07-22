@@ -1,4 +1,4 @@
--- Drop Tables in Reverse Dependency Order
+
 DROP TABLE Book_Authors;
 DROP TABLE Book_Copies;
 DROP TABLE Book_Loans;
@@ -7,12 +7,10 @@ DROP TABLE Borrower;
 DROP TABLE Library_Branch;
 DROP TABLE Publisher;
 
--- Create Publisher Table
 CREATE TABLE Publisher (
     PublisherName VARCHAR2(100) PRIMARY KEY
 );
 
--- Create Book Info Table
 CREATE TABLE BOOK_INFO (
     BookID NUMBER PRIMARY KEY,
     Title VARCHAR2(255) NOT NULL,
@@ -20,7 +18,6 @@ CREATE TABLE BOOK_INFO (
     FOREIGN KEY (PublisherName) REFERENCES Publisher(PublisherName)
 );
 
--- Create Book Authors Table
 CREATE TABLE Book_Authors (
     BookID NUMBER,
     AuthorName VARCHAR2(255),
@@ -28,14 +25,12 @@ CREATE TABLE Book_Authors (
     FOREIGN KEY (BookID) REFERENCES BOOK_INFO(BookID)
 );
 
--- Create Library Branch Table
 CREATE TABLE Library_Branch (
     BranchID NUMBER PRIMARY KEY,
     BranchName VARCHAR2(255) NOT NULL,
     Address VARCHAR2(255) NOT NULL
 );
 
--- Create Borrower Table
 CREATE TABLE Borrower (
     CardNo NUMBER PRIMARY KEY,
     Name VARCHAR2(255) NOT NULL,
@@ -43,7 +38,6 @@ CREATE TABLE Borrower (
     Phone VARCHAR2(15) NOT NULL
 );
 
--- Create Book Copies Table
 CREATE TABLE Book_Copies (
     BookID NUMBER,
     BranchID NUMBER,
@@ -53,7 +47,6 @@ CREATE TABLE Book_Copies (
     FOREIGN KEY (BranchID) REFERENCES Library_Branch(BranchID)
 );
 
--- Create Book Loans Table
 CREATE TABLE Book_Loans (
     BookLoanID NUMBER PRIMARY KEY,
     BookID NUMBER,
@@ -66,15 +59,38 @@ CREATE TABLE Book_Loans (
     FOREIGN KEY (CardNo) REFERENCES Borrower(CardNo)
 );
 
--- Insert Sample Data
 INSERT INTO Publisher VALUES ('Penguin Publishers');
 INSERT INTO Publisher VALUES ('HarperCollins');
+INSERT INTO Publisher VALUES ('Allen & Unwin');
+INSERT INTO Publisher VALUES ('Secker & Warburg');
+INSERT INTO Publisher VALUES ('T. Egerton');
+INSERT INTO Publisher VALUES ('Charles Scribner's Sons');
+INSERT INTO Publisher VALUES ('Little, Brown and Company');
+INSERT INTO Publisher VALUES ('Geoffrey Bles');
+INSERT INTO Publisher VALUES ('Harper & Brothers');
+INSERT INTO Publisher VALUES ('Richard Bentley');
 
-INSERT INTO BOOK_INFO VALUES (1, 'The Great Gatsby', 'Penguin Publishers');
-INSERT INTO BOOK_INFO VALUES (2, 'To Kill a Mockingbird', 'HarperCollins');
+INSERT INTO BOOK_INFO VALUES (1, 'Harry Potter and the Sorcerer''s Stone', 'Penguin Publishers');
+INSERT INTO BOOK_INFO VALUES (2, 'The Hobbit', 'Allen & Unwin');
+INSERT INTO BOOK_INFO VALUES (3, 'To Kill a Mockingbird', 'HarperCollins');
+INSERT INTO BOOK_INFO VALUES (4, '1984', 'Secker & Warburg');
+INSERT INTO BOOK_INFO VALUES (5, 'Pride and Prejudice', 'T. Egerton');
+INSERT INTO BOOK_INFO VALUES (6, 'The Great Gatsby', 'Charles Scribner''s Sons');
+INSERT INTO BOOK_INFO VALUES (7, 'The Catcher in the Rye', 'Little, Brown and Company');
+INSERT INTO BOOK_INFO VALUES (8, 'The Lord of the Rings', 'Allen & Unwin');
+INSERT INTO BOOK_INFO VALUES (9, 'The Chronicles of Narnia', 'Geoffrey Bles');
+INSERT INTO BOOK_INFO VALUES (10, 'Moby-Dick', 'Richard Bentley');
 
-INSERT INTO Book_Authors VALUES (1, 'F. Scott Fitzgerald');
-INSERT INTO Book_Authors VALUES (2, 'Harper Lee');
+INSERT INTO Book_Authors VALUES (1, 'J.K. Rowling');
+INSERT INTO Book_Authors VALUES (2, 'J.R.R. Tolkien');
+INSERT INTO Book_Authors VALUES (3, 'Harper Lee');
+INSERT INTO Book_Authors VALUES (4, 'George Orwell');
+INSERT INTO Book_Authors VALUES (5, 'Jane Austen');
+INSERT INTO Book_Authors VALUES (6, 'F. Scott Fitzgerald');
+INSERT INTO Book_Authors VALUES (7, 'J.D. Salinger');
+INSERT INTO Book_Authors VALUES (8, 'J.R.R. Tolkien');
+INSERT INTO Book_Authors VALUES (9, 'C.S. Lewis');
+INSERT INTO Book_Authors VALUES (10, 'Herman Melville');
 
 INSERT INTO Library_Branch VALUES (1, 'Central Library', '123 Library St');
 INSERT INTO Library_Branch VALUES (2, 'West End Library', '456 West St');
@@ -88,7 +104,6 @@ INSERT INTO Book_Copies VALUES (2, 2, 3);
 INSERT INTO Book_Loans VALUES (1, 1, 1, 101, SYSDATE, SYSDATE + 14);
 INSERT INTO Book_Loans VALUES (2, 2, 2, 102, SYSDATE, SYSDATE + 14);
 
--- Trigger to Prevent Duplicate Borrower Entry
 CREATE OR REPLACE TRIGGER before_insert_borrower
 BEFORE INSERT ON Borrower
 FOR EACH ROW
@@ -102,7 +117,6 @@ BEGIN
 END;
 /
 
--- Function to Count Books by Publisher
 CREATE OR REPLACE FUNCTION MOST_AVAILABLE_PUBLISHER(PubName IN VARCHAR2)
 RETURN NUMBER IS
     COUNT_OF_BOOKS NUMBER;
@@ -114,7 +128,6 @@ BEGIN
 END;
 /
 
--- Procedure to Display Book and Borrower Details
 CREATE OR REPLACE PROCEDURE Showdata(bookid_ IN BOOK_INFO.BookID%TYPE,
                                       bankid_ IN Book_Loans.BookLoanID%TYPE) 
 IS
@@ -144,17 +157,3 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Unexpected error occurred');
 END;
 /
-
--- Cursor to Fetch Borrower Details
-DECLARE
-    CURSOR c_customers IS 
-        SELECT Name, CardNo, Address, Phone FROM Borrower;
-BEGIN
-    FOR cust IN c_customers LOOP
-        DBMS_OUTPUT.PUT_LINE('Name: ' || cust.Name || ', CardNo: ' || cust.CardNo);
-    END LOOP;
-END;
-/
-
--- Test Function
-SELECT MOST_AVAILABLE_PUBLISHER('Penguin Publishers') FROM dual;
